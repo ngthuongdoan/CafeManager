@@ -5,17 +5,50 @@
  */
 package cafemanager;
 
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author BlackVernon
  */
 public class BillGUI extends javax.swing.JFrame {
-
+    private ArrayList<Bill> billList = new ArrayList<Bill>();
     /**
      * Creates new form BillGUI
+     *
+     * @return
      */
-    public BillGUI() {
+    public static ResultSet Connect() throws SQLException, ClassNotFoundException {
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        String ipAddress = "10.1.21.91";
+        String dbUrl = "jdbc:sqlserver://" + ipAddress + ":1433;instance=SQLSERVER;databaseName=CAFE;user=sa;password=sa2017";
+        java.sql.Connection con = DriverManager.getConnection(dbUrl);
+        Statement s = con.createStatement();
+        ResultSet rs = s.executeQuery("select a.MaHoaDon from HoaDon as a, ChiTietMonAn as b, MonAn as c\n"
+                + "where\n"
+                + "	a.MaHoaDon=b.MaHoaDon and\n"
+                + "	c.MaMonAn=b.MaMonAn and\n"
+                + "	a.MaKH='KH-1'");
+        return rs;
+    }
+
+    public BillGUI() throws SQLException, ClassNotFoundException {
         initComponents();
+        ResultSet result = Connect();
+        while(result.next()){
+            Bill tempBill = new Bill();
+            tempBill.setIdBill(result.getString("MaHoaDon"));
+            billList.add(tempBill);
+        }
+        
+        this.jTextPane1.setText(billList.get(0).toString());
+        this.jTextPane1.setEditable(false);
     }
 
     /**
@@ -27,17 +60,28 @@ public class BillGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextPane1 = new javax.swing.JTextPane();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jScrollPane1.setViewportView(jTextPane1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(523, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -71,13 +115,17 @@ public class BillGUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
                 new BillGUI().setVisible(true);
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(BillGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextPane jTextPane1;
     // End of variables declaration//GEN-END:variables
 }
