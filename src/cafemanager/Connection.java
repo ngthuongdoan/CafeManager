@@ -16,13 +16,17 @@ import java.sql.Statement;
  */
 class Connection {
 
-    public static void Connect() {
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String ipAddress = "10.1.21.19";
-            String dbUrl = "jdbc:sqlserver://" + ipAddress + ":1433;instance=SQLSERVER;databaseName=account;user=sa;password=sa2017";
-            java.sql.Connection con = DriverManager.getConnection(dbUrl);
-        } catch (ClassNotFoundException | SQLException e) {
-        }
+    public static ResultSet Connect(String ipAddress, String port, String databasename, String username, String password) throws SQLException, ClassNotFoundException {
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + port + ";instance=SQLSERVER;databaseName=" + databasename + ";user=" + username + ";password=" + password;
+        java.sql.Connection con = DriverManager.getConnection(dbUrl);
+        Statement s = con.createStatement();
+        ResultSet rs = s.executeQuery("select a.MaHoaDon from HoaDon as a, ChiTietMonAn as b, MonAn as c\n"
+                + "where\n"
+                + "	a.MaHoaDon=b.MaHoaDon and\n"
+                + "	c.MaMonAn=b.MaMonAn and\n"
+                + "	a.MaKH='KH-1'");
+        return rs;
     }
+
 }

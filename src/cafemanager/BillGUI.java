@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  *
@@ -24,31 +25,34 @@ public class BillGUI extends javax.swing.JFrame {
      *
      * @return
      */
-    public static ResultSet Connect() throws SQLException, ClassNotFoundException {
-        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-        String ipAddress = "10.1.21.91";
-        String dbUrl = "jdbc:sqlserver://" + ipAddress + ":1433;instance=SQLSERVER;databaseName=CAFE;user=sa;password=sa2017";
-        java.sql.Connection con = DriverManager.getConnection(dbUrl);
-        Statement s = con.createStatement();
-        ResultSet rs = s.executeQuery("select a.MaHoaDon from HoaDon as a, ChiTietMonAn as b, MonAn as c\n"
-                + "where\n"
-                + "	a.MaHoaDon=b.MaHoaDon and\n"
-                + "	c.MaMonAn=b.MaMonAn and\n"
-                + "	a.MaKH='KH-1'");
-        return rs;
-    }
+    
 
+    private void addMoreGUI(){
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        doneBtn_1.setBounds(0,MAXIMIZED_HORIZ,200, 200);
+        billText_1.add(doneBtn_1);
+        doneBtn_2.setBounds(0,MAXIMIZED_HORIZ,200, 200);
+        billText_2.add(doneBtn_2);
+        doneBtn_3.setBounds(0,MAXIMIZED_HORIZ,200, 200);
+        billText_3.add(doneBtn_3);
+        doneBtn_4.setBounds(0,MAXIMIZED_HORIZ,200, 200);
+        billText_4.add(doneBtn_4);
+    }
+    
     public BillGUI() throws SQLException, ClassNotFoundException {
         initComponents();
-        ResultSet result = Connect();
+        addMoreGUI();
+        //Get Connection
+        String ipAddress="";
+        ResultSet result = Connection.Connect(ipAddress,"1433","HoaDon","sa","sa2017");
         while(result.next()){
             Bill tempBill = new Bill();
             tempBill.setIdBill(result.getString("MaHoaDon"));
             billList.add(tempBill);
         }
         
-        this.jTextPane1.setText(billList.get(0).toString());
-        this.jTextPane1.setEditable(false);
+        this.billText_1.setText(billList.get(0).toString());
+        this.billText_1.setEditable(false);
     }
 
     /**
@@ -60,31 +64,56 @@ public class BillGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        billText_1 = new javax.swing.JTextPane();
+        doneBtn_1 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        billText_2 = new javax.swing.JTextPane();
+        doneBtn_2 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        billText_3 = new javax.swing.JTextPane();
+        doneBtn_3 = new javax.swing.JButton();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        billText_4 = new javax.swing.JTextPane();
+        doneBtn_4 = new javax.swing.JButton();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setSize(new java.awt.Dimension(0, 0));
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
-        jScrollPane1.setViewportView(jTextPane1);
+        jScrollPane1.setViewportView(billText_1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(523, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 460, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        getContentPane().add(jScrollPane1);
 
-        pack();
+        doneBtn_1.setText("jButton2");
+        getContentPane().add(doneBtn_1);
+
+        jScrollPane2.setViewportView(billText_2);
+
+        getContentPane().add(jScrollPane2);
+
+        doneBtn_2.setText("jButton3");
+        getContentPane().add(doneBtn_2);
+
+        jScrollPane3.setViewportView(billText_3);
+
+        getContentPane().add(jScrollPane3);
+
+        doneBtn_3.setText("jButton4");
+        getContentPane().add(doneBtn_3);
+
+        jScrollPane4.setViewportView(billText_4);
+
+        getContentPane().add(jScrollPane4);
+
+        doneBtn_4.setText("jButton5");
+        getContentPane().add(doneBtn_4);
+
+        setSize(new java.awt.Dimension(703, 485));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -125,7 +154,18 @@ public class BillGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextPane billText_1;
+    private javax.swing.JTextPane billText_2;
+    private javax.swing.JTextPane billText_3;
+    private javax.swing.JTextPane billText_4;
+    private javax.swing.JButton doneBtn_1;
+    private javax.swing.JButton doneBtn_2;
+    private javax.swing.JButton doneBtn_3;
+    private javax.swing.JButton doneBtn_4;
+    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextPane jTextPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     // End of variables declaration//GEN-END:variables
 }

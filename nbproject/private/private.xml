@@ -3,7 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/E:/Code/Java/CafeManager/src/cafemanager/Item.java</file>
+            <file>file:/E:/Code/Java/CafeManager/src/cafemanager/Food.java</file>
             <file>file:/E:/Code/Java/CafeManager/src/cafemanager/Bill.java</file>
+            <file>file:/E:/Code/Java/CafeManager/src/cafemanager/Connection.java</file>
+            <file>file:/E:/Code/Java/CafeManager/src/cafemanager/Customer.java</file>
+            <file>file:/E:/Code/Java/CafeManager/src/cafemanager/Drink.java</file>
             <file>file:/E:/Code/Java/CafeManager/src/cafemanager/BillGUI.java</file>
         </group>
     </open-files>

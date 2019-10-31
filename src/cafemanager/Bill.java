@@ -1,37 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cafemanager;
 
 import java.util.Date;
 
-/**
- *
- * @author BlackVernon
- */
-class Bill {
+public class Bill {
 
     private String idBill;
-    private int idEmployee;
-    private int idTable;
-    private int idCustomer;
-    private Date createDate;
+    private Date date;
+    private Item items;
     private float total;
-//    Danh sách món????????
-//    private ArrayList<Item> ls;
-
-    public Bill() {
-        this.idBill = new String();
-        this.idEmployee = 0;
-        this.idTable = 0;
-        this.idCustomer = 0;
-        this.createDate = new Date();
-        this.total = 0;
-//        this.ls= new ArrayList<>();
-    }
-
+    private Customer cus;
+    
     public String getIdBill() {
         return idBill;
     }
@@ -40,36 +18,20 @@ class Bill {
         this.idBill = idBill;
     }
 
-    public int getIdEmployee() {
-        return idEmployee;
+    public Date getDate() {
+        return date;
     }
 
-    public void setIdEmployee(int idEmployee) {
-        this.idEmployee = idEmployee;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
-    public int getIdTable() {
-        return idTable;
+    public Item getItems() {
+        return items;
     }
 
-    public void setIdTable(int idTable) {
-        this.idTable = idTable;
-    }
-
-    public int getIdCustomer() {
-        return idCustomer;
-    }
-
-    public void setIdCustomer(int idCustomer) {
-        this.idCustomer = idCustomer;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setItems(Item items) {
+        this.items = items;
     }
 
     public float getTotal() {
@@ -80,12 +42,13 @@ class Bill {
         this.total = total;
     }
 
-    @Override
-    public String toString() {
-        String result="ID Hoa Don: "+ this.idBill+"\nTotal: "+this.total;
-        return result; //To change body of generated methods, choose Tools | Templates.
+    public Customer getCus() {
+        return cus;
+    }
+
+    public void setCus(Customer cus) {
+        this.cus = cus;
     }
     
     
 }
-
