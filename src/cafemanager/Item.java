@@ -1,4 +1,5 @@
 package cafemanager;
+
 public class Item {
 
     private String idItem;
@@ -31,5 +32,4 @@ public class Item {
         this.price = price;
     }
 
-    
 }

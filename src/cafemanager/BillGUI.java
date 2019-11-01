@@ -5,6 +5,8 @@
  */
 package cafemanager;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +21,7 @@ import javax.swing.JFrame;
  * @author BlackVernon
  */
 public class BillGUI extends javax.swing.JFrame {
-    private ArrayList<Bill> billList = new ArrayList<Bill>();
+    private final ArrayList<Bill> billList = new ArrayList<>();
     /**
      * Creates new form BillGUI
      *
@@ -39,11 +41,11 @@ public class BillGUI extends javax.swing.JFrame {
         billText_4.add(doneBtn_4);
     }
     
-    public BillGUI() throws SQLException, ClassNotFoundException {
+    public BillGUI() throws SQLException, ClassNotFoundException, Exception {
         initComponents();
         addMoreGUI();
         //Get Connection
-        String ipAddress="";
+        String ipAddress=IPAddress.getIP();
         ResultSet result = Connection.Connect(ipAddress,"1433","HoaDon","sa","sa2017");
         while(result.next()){
             Bill tempBill = new Bill();
@@ -147,7 +149,7 @@ public class BillGUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             try {
                 new BillGUI().setVisible(true);
-            } catch (SQLException | ClassNotFoundException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(BillGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
