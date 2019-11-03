@@ -15,7 +15,7 @@ import javax.swing.JPanel;
  *
  * @author BlackVernon
  */
-class ImagePanel extends JPanel {
+public class ImagePanel extends JPanel {
 
   private Image img;
 

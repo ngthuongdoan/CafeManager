@@ -16,19 +16,20 @@ import java.sql.Statement;
  */
 class Connection {
 
-    public static ResultSet Connect(String ipAddress, String port, String databasename, String username, String password) throws SQLException, ClassNotFoundException {
+    public static ResultSet ConnectQuery(String ipAddress, String port, String databasename, String username, String password, String query) throws SQLException, ClassNotFoundException {
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + port + ";instance=SQLSERVER;databaseName=" + databasename + ";user=" + username + ";password=" + password;
         java.sql.Connection con = DriverManager.getConnection(dbUrl);
         Statement s = con.createStatement();
-//        ResultSet rs = s.executeQuery("select a.MaHoaDon from HoaDon as a, ChiTietMonAn as b, MonAn as c\n"
-//                + "where\n"
-//                + "	a.MaHoaDon=b.MaHoaDon and\n"
-//                + "	c.MaMonAn=b.MaMonAn and\n"
-//                + "	a.MaKH='KH-1'");
         ResultSet rs;
-        rs = s.executeQuery("select a.MaChucVu from ChucVu as a where a.TenChucVu='Chu'");
+        rs = s.executeQuery(query);
         return rs;
     }
-
+    public static void ConnectUpdate(String ipAddress, String port, String databasename, String username, String password, String query) throws SQLException, ClassNotFoundException {
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + port + ";instance=SQLSERVER;databaseName=" + databasename + ";user=" + username + ";password=" + password;
+        java.sql.Connection con = DriverManager.getConnection(dbUrl);
+        Statement s = con.createStatement();
+        s.executeUpdate(query);
+    }
 }

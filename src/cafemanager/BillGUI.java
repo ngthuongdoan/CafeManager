@@ -5,6 +5,7 @@
  */
 package cafemanager;
 
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.net.Inet4Address;
@@ -19,6 +20,10 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
 
 /**
  *
@@ -26,7 +31,8 @@ import javax.swing.JLabel;
  */
 public class BillGUI extends javax.swing.JFrame {
 
-    private final ArrayList<Bill> billList = new ArrayList<>();
+    private ArrayList<Bill> billList;
+    private String ipAddress = IPAddress.getIP();
 
     /**
      * Creates new form BillGUI
@@ -47,19 +53,67 @@ public class BillGUI extends javax.swing.JFrame {
         doneBtnBillPanel3.setContentAreaFilled(false);
     }
 
+    public static void append(String s, JTextPane jtp) {
+        try {
+            Document doc = jtp.getDocument();
+            doc.insertString(doc.getLength(), s, null);
+        } catch (BadLocationException exc) {
+            exc.printStackTrace();
+        }
+    }
+
+    public void showBill() throws Exception {
+        billList = new ArrayList<>();
+        clearPane();
+        String billquery, monquery;
+        billquery = "select a.MaHoaDon, a.MaBan "
+                + "from HoaDon as a, TrangThai as b "
+                + "where "
+                + "b.TrangThaiHD=0 and "
+                + "b.MaHoaDon=a.MaHoaDon";
+        ResultSet resultBill = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", billquery);
+        while (resultBill.next()) {
+            Bill tempBill = new Bill();
+            tempBill.setIdBill(resultBill.getString("MaHoaDon"));
+            tempBill.setIdTable(resultBill.getString("MaBan"));
+            monquery = "select a.TenMon, b.SoLuongMon from Mon as a, ChiTietMon as b \n"
+                    + "where"
+                    + "	b.MaHoaDon='"
+                    + resultBill.getString("MaHoaDon")
+                    + "' AND"
+                    + "	b.MaMon = a.MaMon";
+            ResultSet resultMon = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", monquery);
+            while (resultMon.next()) {
+                tempBill.setMon(resultMon.getString("TenMon"), Integer.valueOf(resultMon.getString("SoLuongMon")));
+            }
+            billList.add(tempBill);
+        }
+        for (int i = 0; i < billList.size(); i++) {
+            if (!this.billPanel1.getText().isEmpty()) {
+                if (!this.billPanel2.getText().isEmpty()) {
+                    if (!this.billPanel3.getText().isEmpty()) {
+                    } else {
+                        this.billPanel3.setText(billList.get(i).toString());
+                    }
+                } else {
+                    this.billPanel2.setText(billList.get(i).toString());
+                }
+            } else {
+                this.billPanel1.setText(billList.get(i).toString());
+            }
+        }
+    }
+
+    private void clearPane() {
+        this.billPanel1.setText("");
+        this.billPanel2.setText("");
+        this.billPanel3.setText("");
+    }
+
     public BillGUI() throws SQLException, ClassNotFoundException, Exception {
         initComponents();
         addMoreGUI();
-        //Get Connection
-        String ipAddress = IPAddress.getIP();
-        ResultSet result = Connection.Connect(ipAddress, "1433", "CAFE", "sa", "sa2017");
-        while (result.next()) {
-            Bill tempBill = new Bill();
-            tempBill.setIdBill(result.getString("MaChucVu"));
-            billList.add(tempBill);
-        }
-//        this.billText_1.setText(billList.get(0).toString());
-//        this.billText_1.setEditable(false);
+        showBill();
     }
 
     /**
@@ -88,13 +142,21 @@ public class BillGUI extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(1366, 720));
 
+        billPanel3.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jScrollPane3.setViewportView(billPanel3);
 
+        billPanel1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jScrollPane4.setViewportView(billPanel1);
 
+        billPanel2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jScrollPane5.setViewportView(billPanel2);
 
         doneBtnBillPanel1.setIcon(new javax.swing.ImageIcon("E:\\Code\\Java\\CafeManager\\Design\\image\\loginCheck100px.png")); // NOI18N
+        doneBtnBillPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                doneBtnBillPanel1MouseClicked(evt);
+            }
+        });
 
         doneBtnBillPanel2.setIcon(new javax.swing.ImageIcon("E:\\Code\\Java\\CafeManager\\Design\\image\\loginCheck100px.png")); // NOI18N
 
@@ -140,6 +202,26 @@ public class BillGUI extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(1382, 759));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void doneBtnBillPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_doneBtnBillPanel1MouseClicked
+        // TODO add your handling code here:
+        String updateStateQuery;
+        String mahoadon = billPanel1.getText().split("\n")[0];
+        mahoadon = mahoadon.substring(7);
+
+        updateStateQuery = "UPDATE TrangThai"
+                + " SET TrangThaiHD=1"
+                + " where MaHoaDon='"
+                + mahoadon + "'";
+        
+        try {
+            Connection.ConnectUpdate(ipAddress, "1433", "CAFE", "sa", "sa2017", updateStateQuery);
+            showBill();
+        } catch (Exception ex) {
+            Logger.getLogger(BillGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_doneBtnBillPanel1MouseClicked
 
     /**
      * @param args the command line arguments

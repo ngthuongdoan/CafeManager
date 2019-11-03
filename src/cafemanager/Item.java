@@ -6,7 +6,7 @@ class Item {
 
     private String itemName;
     private int quantity;
-    private float price;
+    private String price;
 
     public int getQuantity() {
         return quantity;
@@ -32,11 +32,11 @@ class Item {
         this.itemName = itemName;
     }
 
-    public float getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
