@@ -1,14 +1,15 @@
 package cafemanager;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Bill {
 
     private String idBill;
     private Date date;
-    private Item items;
-    private float total;
     private Customer cus;
+//    private ArrayList<Item> items = new ArrayList<Item>();
+    private float total;
     
     public String getIdBill() {
         return idBill;
@@ -26,13 +27,13 @@ public class Bill {
         this.date = date;
     }
 
-    public Item getItems() {
-        return items;
-    }
+//    public Item getItems() {
+//        return items;
+//    }
 
-    public void setItems(Item items) {
-        this.items = items;
-    }
+//    public void setItems(Item items) {
+//        this.items.
+//    }
 
     public float getTotal() {
         return total;

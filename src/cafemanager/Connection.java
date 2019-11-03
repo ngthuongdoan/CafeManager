@@ -21,11 +21,13 @@ class Connection {
         String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + port + ";instance=SQLSERVER;databaseName=" + databasename + ";user=" + username + ";password=" + password;
         java.sql.Connection con = DriverManager.getConnection(dbUrl);
         Statement s = con.createStatement();
-        ResultSet rs = s.executeQuery("select a.MaHoaDon from HoaDon as a, ChiTietMonAn as b, MonAn as c\n"
-                + "where\n"
-                + "	a.MaHoaDon=b.MaHoaDon and\n"
-                + "	c.MaMonAn=b.MaMonAn and\n"
-                + "	a.MaKH='KH-1'");
+//        ResultSet rs = s.executeQuery("select a.MaHoaDon from HoaDon as a, ChiTietMonAn as b, MonAn as c\n"
+//                + "where\n"
+//                + "	a.MaHoaDon=b.MaHoaDon and\n"
+//                + "	c.MaMonAn=b.MaMonAn and\n"
+//                + "	a.MaKH='KH-1'");
+        ResultSet rs;
+        rs = s.executeQuery("select a.MaChucVu from ChucVu as a where a.TenChucVu='Chu'");
         return rs;
     }
 

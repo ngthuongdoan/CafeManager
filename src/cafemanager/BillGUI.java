@@ -5,6 +5,8 @@
  */
 package cafemanager;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.sql.DriverManager;
@@ -14,47 +16,50 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 /**
  *
  * @author BlackVernon
  */
 public class BillGUI extends javax.swing.JFrame {
+
     private final ArrayList<Bill> billList = new ArrayList<>();
+
     /**
      * Creates new form BillGUI
      *
      * @return
      */
-    
-
-    private void addMoreGUI(){
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        doneBtn_1.setBounds(0,MAXIMIZED_HORIZ,200, 200);
-        billText_1.add(doneBtn_1);
-        doneBtn_2.setBounds(0,MAXIMIZED_HORIZ,200, 200);
-        billText_2.add(doneBtn_2);
-        doneBtn_3.setBounds(0,MAXIMIZED_HORIZ,200, 200);
-        billText_3.add(doneBtn_3);
-        doneBtn_4.setBounds(0,MAXIMIZED_HORIZ,200, 200);
-        billText_4.add(doneBtn_4);
+    private void addMoreGUI() {
+        ImagePanel panel = new ImagePanel(
+                new ImageIcon("E:\\Code\\Java\\CafeManager\\Design\\image\\loginBackgroundRaw.jpg").getImage());
+        setBounds(0, 0, 1366, 720);
+        getContentPane().add(panel);
+        setVisible(true);
+        billPanel1.setEditable(false);
+        billPanel2.setEditable(false);
+        billPanel3.setEditable(false);
+        doneBtnBillPanel1.setContentAreaFilled(false);
+        doneBtnBillPanel2.setContentAreaFilled(false);
+        doneBtnBillPanel3.setContentAreaFilled(false);
     }
-    
+
     public BillGUI() throws SQLException, ClassNotFoundException, Exception {
         initComponents();
         addMoreGUI();
         //Get Connection
-        String ipAddress=IPAddress.getIP();
-        ResultSet result = Connection.Connect(ipAddress,"1433","HoaDon","sa","sa2017");
-        while(result.next()){
+        String ipAddress = IPAddress.getIP();
+        ResultSet result = Connection.Connect(ipAddress, "1433", "CAFE", "sa", "sa2017");
+        while (result.next()) {
             Bill tempBill = new Bill();
-            tempBill.setIdBill(result.getString("MaHoaDon"));
+            tempBill.setIdBill(result.getString("MaChucVu"));
             billList.add(tempBill);
         }
-        
-        this.billText_1.setText(billList.get(0).toString());
-        this.billText_1.setEditable(false);
+//        this.billText_1.setText(billList.get(0).toString());
+//        this.billText_1.setEditable(false);
     }
 
     /**
@@ -67,54 +72,72 @@ public class BillGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        billText_1 = new javax.swing.JTextPane();
-        doneBtn_1 = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        billText_2 = new javax.swing.JTextPane();
-        doneBtn_2 = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        billText_3 = new javax.swing.JTextPane();
-        doneBtn_3 = new javax.swing.JButton();
+        billPanel3 = new javax.swing.JTextPane();
         jScrollPane4 = new javax.swing.JScrollPane();
-        billText_4 = new javax.swing.JTextPane();
-        doneBtn_4 = new javax.swing.JButton();
+        billPanel1 = new javax.swing.JTextPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        billPanel2 = new javax.swing.JTextPane();
+        doneBtnBillPanel1 = new javax.swing.JButton();
+        doneBtnBillPanel2 = new javax.swing.JButton();
+        doneBtnBillPanel3 = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setSize(new java.awt.Dimension(0, 0));
-        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
+        setResizable(false);
+        setSize(new java.awt.Dimension(1366, 720));
 
-        jScrollPane1.setViewportView(billText_1);
+        jScrollPane3.setViewportView(billPanel3);
 
-        getContentPane().add(jScrollPane1);
+        jScrollPane4.setViewportView(billPanel1);
 
-        doneBtn_1.setText("jButton2");
-        getContentPane().add(doneBtn_1);
+        jScrollPane5.setViewportView(billPanel2);
 
-        jScrollPane2.setViewportView(billText_2);
+        doneBtnBillPanel1.setIcon(new javax.swing.ImageIcon("E:\\Code\\Java\\CafeManager\\Design\\image\\loginCheck100px.png")); // NOI18N
 
-        getContentPane().add(jScrollPane2);
+        doneBtnBillPanel2.setIcon(new javax.swing.ImageIcon("E:\\Code\\Java\\CafeManager\\Design\\image\\loginCheck100px.png")); // NOI18N
 
-        doneBtn_2.setText("jButton3");
-        getContentPane().add(doneBtn_2);
+        doneBtnBillPanel3.setIcon(new javax.swing.ImageIcon("E:\\Code\\Java\\CafeManager\\Design\\image\\loginCheck100px.png")); // NOI18N
 
-        jScrollPane3.setViewportView(billText_3);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(83, 83, 83)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(147, 147, 147)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(82, 82, 82))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(201, 201, 201)
+                .addComponent(doneBtnBillPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(367, 367, 367)
+                .addComponent(doneBtnBillPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(doneBtnBillPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(180, 180, 180))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4))
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(doneBtnBillPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(doneBtnBillPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(doneBtnBillPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(44, Short.MAX_VALUE))
+        );
 
-        getContentPane().add(jScrollPane3);
-
-        doneBtn_3.setText("jButton4");
-        getContentPane().add(doneBtn_3);
-
-        jScrollPane4.setViewportView(billText_4);
-
-        getContentPane().add(jScrollPane4);
-
-        doneBtn_4.setText("jButton5");
-        getContentPane().add(doneBtn_4);
-
-        setSize(new java.awt.Dimension(703, 485));
+        setSize(new java.awt.Dimension(1382, 759));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -134,15 +157,11 @@ public class BillGUI extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BillGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BillGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BillGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(BillGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -156,18 +175,15 @@ public class BillGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextPane billText_1;
-    private javax.swing.JTextPane billText_2;
-    private javax.swing.JTextPane billText_3;
-    private javax.swing.JTextPane billText_4;
-    private javax.swing.JButton doneBtn_1;
-    private javax.swing.JButton doneBtn_2;
-    private javax.swing.JButton doneBtn_3;
-    private javax.swing.JButton doneBtn_4;
+    private javax.swing.JTextPane billPanel1;
+    private javax.swing.JTextPane billPanel2;
+    private javax.swing.JTextPane billPanel3;
+    private javax.swing.JButton doneBtnBillPanel1;
+    private javax.swing.JButton doneBtnBillPanel2;
+    private javax.swing.JButton doneBtnBillPanel3;
     private javax.swing.JButton jButton1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     // End of variables declaration//GEN-END:variables
 }

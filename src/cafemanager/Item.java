@@ -1,12 +1,20 @@
 package cafemanager;
 
-public class Item {
+class Item {
 
     private String idItem;
 
     private String itemName;
-
+    private int quantity;
     private float price;
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public String getIdItem() {
         return idItem;
