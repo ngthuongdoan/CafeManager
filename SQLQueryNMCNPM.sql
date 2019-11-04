@@ -189,7 +189,8 @@ from TrangThai as a
 where 
 	a.MaHoaDon='HD_1'
 
-update TrangThai set TrangThaiHD=0
+update TrangThai set TrangThaiHD=0 where 
+	a.MaHoaDon='HD_1'
 
 select a.MaHoaDon, a.MaBan
 from HoaDon as a, TrangThai as b

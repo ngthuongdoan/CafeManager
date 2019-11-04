@@ -128,7 +128,7 @@
     <Component class="javax.swing.JButton" name="doneBtnBillPanel1">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="E:\Code\Java\CafeManager\Design\image\loginCheck100px.png"/>
+          <Image iconType="3" name="/image/loginCheck100px.png"/>
         </Property>
       </Properties>
       <Events>
@@ -138,16 +138,22 @@
     <Component class="javax.swing.JButton" name="doneBtnBillPanel2">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="E:\Code\Java\CafeManager\Design\image\loginCheck100px.png"/>
+          <Image iconType="3" name="/image/loginCheck100px.png"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="doneBtnBillPanel2MouseClicked"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="doneBtnBillPanel3">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="E:\Code\Java\CafeManager\Design\image\loginCheck100px.png"/>
+          <Image iconType="3" name="/image/loginCheck100px.png"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="doneBtnBillPanel3MouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

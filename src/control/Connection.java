@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cafemanager;
+package control;
 
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,7 +14,7 @@ import java.sql.Statement;
  *
  * @author BlackVernon
  */
-class Connection {
+public class Connection {
 
     public static ResultSet ConnectQuery(String ipAddress, String port, String databasename, String username, String password, String query) throws SQLException, ClassNotFoundException {
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

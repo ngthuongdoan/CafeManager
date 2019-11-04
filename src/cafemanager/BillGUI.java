@@ -5,6 +5,9 @@
  */
 package cafemanager;
 
+import control.ImagePanel;
+import control.IPAddress;
+import control.Connection;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -15,15 +18,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import javax.swing.text.Element;
 
 /**
  *
@@ -40,8 +43,9 @@ public class BillGUI extends javax.swing.JFrame {
      * @return
      */
     private void addMoreGUI() {
-        ImagePanel panel = new ImagePanel(
-                new ImageIcon("E:\\Code\\Java\\CafeManager\\Design\\image\\loginBackgroundRaw.jpg").getImage());
+        ImagePanel panel;
+        panel = new ImagePanel(
+                new ImageIcon("src\\image\\loginBackgroundRaw.jpg").getImage());
         setBounds(0, 0, 1366, 720);
         getContentPane().add(panel);
         setVisible(true);
@@ -113,7 +117,20 @@ public class BillGUI extends javax.swing.JFrame {
     public BillGUI() throws SQLException, ClassNotFoundException, Exception {
         initComponents();
         addMoreGUI();
-        showBill();
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    if (billPanel1.getText().isEmpty()|billPanel2.getText().isEmpty()|billPanel3.getText().isEmpty()) {
+                        showBill();
+                    }
+                } catch (Exception ex) {
+                    Logger.getLogger(BillGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }, 0, 1000);
+
     }
 
     /**
@@ -151,16 +168,26 @@ public class BillGUI extends javax.swing.JFrame {
         billPanel2.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jScrollPane5.setViewportView(billPanel2);
 
-        doneBtnBillPanel1.setIcon(new javax.swing.ImageIcon("E:\\Code\\Java\\CafeManager\\Design\\image\\loginCheck100px.png")); // NOI18N
+        doneBtnBillPanel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/loginCheck100px.png"))); // NOI18N
         doneBtnBillPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 doneBtnBillPanel1MouseClicked(evt);
             }
         });
 
-        doneBtnBillPanel2.setIcon(new javax.swing.ImageIcon("E:\\Code\\Java\\CafeManager\\Design\\image\\loginCheck100px.png")); // NOI18N
+        doneBtnBillPanel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/loginCheck100px.png"))); // NOI18N
+        doneBtnBillPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                doneBtnBillPanel2MouseClicked(evt);
+            }
+        });
 
-        doneBtnBillPanel3.setIcon(new javax.swing.ImageIcon("E:\\Code\\Java\\CafeManager\\Design\\image\\loginCheck100px.png")); // NOI18N
+        doneBtnBillPanel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/loginCheck100px.png"))); // NOI18N
+        doneBtnBillPanel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                doneBtnBillPanel3MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -206,22 +233,59 @@ public class BillGUI extends javax.swing.JFrame {
     private void doneBtnBillPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_doneBtnBillPanel1MouseClicked
         // TODO add your handling code here:
         String updateStateQuery;
-        String mahoadon = billPanel1.getText().split("\n")[0];
-        mahoadon = mahoadon.substring(7);
-
-        updateStateQuery = "UPDATE TrangThai"
-                + " SET TrangThaiHD=1"
-                + " where MaHoaDon='"
-                + mahoadon + "'";
-        
         try {
+            String mahoadon = billPanel1.getText().split("\n")[0];
+            mahoadon = mahoadon.substring(7);
+
+            updateStateQuery = "UPDATE TrangThai"
+                    + " SET TrangThaiHD=1"
+                    + " where MaHoaDon='"
+                    + mahoadon + "'";
+
             Connection.ConnectUpdate(ipAddress, "1433", "CAFE", "sa", "sa2017", updateStateQuery);
             showBill();
         } catch (Exception ex) {
-            Logger.getLogger(BillGUI.class.getName()).log(Level.SEVERE, null, ex);
+            //Do Nothing
         }
-        
     }//GEN-LAST:event_doneBtnBillPanel1MouseClicked
+
+    private void doneBtnBillPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_doneBtnBillPanel3MouseClicked
+        // TODO add your handling code here:
+        String updateStateQuery;
+        try {
+            String mahoadon = billPanel3.getText().split("\n")[0];
+            mahoadon = mahoadon.substring(7);
+
+            updateStateQuery = "UPDATE TrangThai"
+                    + " SET TrangThaiHD=1"
+                    + " where MaHoaDon='"
+                    + mahoadon + "'";
+
+            Connection.ConnectUpdate(ipAddress, "1433", "CAFE", "sa", "sa2017", updateStateQuery);
+            showBill();
+        } catch (Exception ex) {
+            //Do Nothing
+        }
+    }//GEN-LAST:event_doneBtnBillPanel3MouseClicked
+
+    private void doneBtnBillPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_doneBtnBillPanel2MouseClicked
+        // TODO add your handling code here:
+        String updateStateQuery;
+        try {
+            String mahoadon = billPanel2.getText().split("\n")[0];
+            mahoadon = mahoadon.substring(7);
+
+            updateStateQuery = "UPDATE TrangThai"
+                    + " SET TrangThaiHD=1"
+                    + " where MaHoaDon='"
+                    + mahoadon + "'";
+
+            Connection.ConnectUpdate(ipAddress, "1433", "CAFE", "sa", "sa2017", updateStateQuery);
+            showBill();
+        } catch (Exception ex) {
+            //Do Nothing
+        }
+    }//GEN-LAST:event_doneBtnBillPanel2MouseClicked
 
     /**
      * @param args the command line arguments

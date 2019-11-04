@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package cafemanager;
+package control;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -14,7 +14,7 @@ import java.util.Enumeration;
  *
  * @author BlackVernon
  */
-class IPAddress {
+public class IPAddress {
     
     public static String getIP() throws Exception {
         Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
