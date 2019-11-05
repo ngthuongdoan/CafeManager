@@ -14,6 +14,7 @@ import control.Connection;
 import control.IPAddress;
 import control.ImagePanel;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,7 +31,7 @@ public class MonGUI extends javax.swing.JFrame {
     Object[] data = new Object[3];
     DefaultTableModel table;
 
-    private String ip;
+    private String ip = "10.1.21.91";
     String port = "1433";
     String dbName = "CAFE";
     String userName = "sa";
@@ -51,7 +52,7 @@ public class MonGUI extends javax.swing.JFrame {
     }
 
     public MonGUI() throws Exception {
-        this.ip = IPAddress.getIP();
+        this.ip  = ip;
         initComponents();
         addmoreGUI();
         table = new DefaultTableModel();
@@ -63,7 +64,33 @@ public class MonGUI extends javax.swing.JFrame {
     public void setSTTBan(int STTBan) {
         txtSTTBan.setText("Table_#" + STTBan);
         this.STTBan_Mon = STTBan;
-
+        
+//        setMaHoaDon();
+       
+    }
+    
+//    SAI
+    public void setMaHoaDon(){
+        String query = "SELECT MAX(MaHoaDon) as a from HoaDon";
+        String MAX_MaHD = "";
+        try {
+            ResultSet rs = control.Connection.ConnectQuery(ip, port, dbName, userName, passWord, query);
+            while (rs.next()) {                
+                try {
+                     MAX_MaHD = rs.getString("a");
+                } catch (NumberFormatException e) {
+                    System.out.println("Loi");
+                }
+                System.out.println("Max_MHD: " + rs.getInt("a"));
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+       
     }
 
     public void setTRANGTHAI(BanGUI ban, int STTBan) {
@@ -81,8 +108,8 @@ public class MonGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        txtImage = new javax.swing.JLabel();
         txtTenMon = new javax.swing.JLabel();
+        txtGiaBan = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox();
         btnGetData = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -92,7 +119,7 @@ public class MonGUI extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        txtMaHoaDon = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtSoLuong = new javax.swing.JLabel();
         txtTongTien = new javax.swing.JLabel();
@@ -100,6 +127,7 @@ public class MonGUI extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         btnXoa = new javax.swing.JButton();
         txtSTTXoaHang = new javax.swing.JTextField();
+        btnThanhToan = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         txtDanhMuc2 = new javax.swing.JLabel();
         txtDanhMuc3 = new javax.swing.JLabel();
@@ -112,13 +140,13 @@ public class MonGUI extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        txtImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtImage.setText("Ten Mon");
-        txtImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
         txtTenMon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        txtTenMon.setText("Gia Ban");
+        txtTenMon.setText("Ten Mon");
         txtTenMon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        txtGiaBan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        txtGiaBan.setText("Gia Ban");
+        txtGiaBan.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -150,8 +178,8 @@ public class MonGUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(62, 62, 62)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtTenMon, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtImage, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtGiaBan, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTenMon, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 332, Short.MAX_VALUE)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -165,12 +193,12 @@ public class MonGUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtImage, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtTenMon, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnGetData, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(55, 55, 55)))
                 .addGap(36, 36, 36)
-                .addComponent(txtTenMon)
+                .addComponent(txtGiaBan)
                 .addContainerGap(546, Short.MAX_VALUE))
         );
 
@@ -202,8 +230,8 @@ public class MonGUI extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel3.setText("Bill:");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel4.setText("#");
+        txtMaHoaDon.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        txtMaHoaDon.setText("#");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel6.setText("Total");
@@ -229,12 +257,19 @@ public class MonGUI extends javax.swing.JFrame {
             }
         });
 
+        btnThanhToan.setText("Thanh Toan");
+        btnThanhToan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnThanhToanActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,7 +283,7 @@ public class MonGUI extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel4))
+                                .addComponent(txtMaHoaDon))
                             .addComponent(txtTongTien)
                             .addComponent(txtSTTBan, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -261,7 +296,10 @@ public class MonGUI extends javax.swing.JFrame {
                                         .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnThanhToan)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,7 +307,7 @@ public class MonGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(txtMaHoaDon))
                 .addGap(43, 43, 43)
                 .addComponent(txtSTTBan)
                 .addGap(18, 18, 18)
@@ -284,6 +322,8 @@ public class MonGUI extends javax.swing.JFrame {
                     .addComponent(txtSoLuong))
                 .addGap(26, 26, 26)
                 .addComponent(txtTongTien)
+                .addGap(44, 44, 44)
+                .addComponent(btnThanhToan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txtSTTXoaHang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -425,9 +465,14 @@ public class MonGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDatMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatMonActionPerformed
-        ban.ban_Model.get(STTBan_Mon - 1).setStatus(true);
-        this.hide();
-        ban.show();
+        if (table.getRowCount()!= 0) {
+            ban.ban_Model.get(STTBan_Mon - 1).setStatus(true);
+            this.hide();
+            ban.show();
+        }
+        else JOptionPane.showMessageDialog(null, "Ko the tao hoa don trong");
+        
+        
 
     }//GEN-LAST:event_btnDatMonActionPerformed
 
@@ -521,6 +566,25 @@ public class MonGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_txtDanhMuc5MouseClicked
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+
+        String tenMon = jComboBox1.getSelectedItem().toString();
+        String query = "select GiaMon from Mon WHERE TenMon =N'" + tenMon + "'";
+        try {
+            ResultSet rs = control.Connection.ConnectQuery(ip, port, dbName, userName, passWord, query);
+            
+            while (rs.next()) { 
+                txtTenMon.setText((jComboBox1.getSelectedItem().toString()));
+                txtGiaBan.setText(rs.getString("GiaMon"));
+                
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+       
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jComboBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox1MouseClicked
@@ -559,15 +623,15 @@ public class MonGUI extends javax.swing.JFrame {
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
 
-        int stt = Integer.valueOf(txtSTTXoaHang.getText());
-
-        tongTien -= (int) table.getValueAt(stt - 1, 1);
-        if (table.getRowCount() > stt - 1) {
-            table.removeRow(stt - 1);
+        int stt = Integer.valueOf(txtSTTXoaHang.getText());     
+       
+        tongTien -= Integer.parseInt((table.getValueAt(stt-1, 1).toString().trim()));
+      
+        if (table.getRowCount() > stt-1) {
+            table.removeRow(stt-1);
             jTable1.setModel(table);
             txtSoLuong.setText(String.valueOf(table.getRowCount()));
-            //SAI
-
+           
             txtTongTien.setText(String.valueOf(tongTien));
         }
     }//GEN-LAST:event_btnXoaActionPerformed
@@ -583,6 +647,22 @@ public class MonGUI extends javax.swing.JFrame {
         addDanhMucMon(danhMucMon);
 
     }//GEN-LAST:event_txtDanhMuc4MouseClicked
+
+    
+    public void setJcomboBoxToEnable(boolean status){
+        
+        jComboBox1.setEnabled(status);
+        
+    }
+    
+    
+    private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
+       
+        ban.ban_Model.get(STTBan_Mon - 1).setStatus(false);
+        this.hide();
+        ban.show();
+        
+    }//GEN-LAST:event_btnThanhToanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -630,12 +710,12 @@ public class MonGUI extends javax.swing.JFrame {
     private javax.swing.JButton btnDatMon;
     private javax.swing.JButton btnGetData;
     private javax.swing.JButton btnHuy;
+    private javax.swing.JButton btnThanhToan;
     private javax.swing.JButton btnXoa;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -647,7 +727,8 @@ public class MonGUI extends javax.swing.JFrame {
     private javax.swing.JLabel txtDanhMuc3;
     private javax.swing.JLabel txtDanhMuc4;
     private javax.swing.JLabel txtDanhMuc5;
-    private javax.swing.JLabel txtImage;
+    private javax.swing.JLabel txtGiaBan;
+    private javax.swing.JLabel txtMaHoaDon;
     private javax.swing.JLabel txtSTTBan;
     private javax.swing.JTextField txtSTTXoaHang;
     private javax.swing.JLabel txtSoLuong;

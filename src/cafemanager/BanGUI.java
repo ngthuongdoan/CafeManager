@@ -259,7 +259,9 @@ public class BanGUI extends javax.swing.JFrame {
         if (!ban_Model.get(STTBan - 1).isStatus()) {
             message = "Ban san sang phuc vu quy khach";
         } else {
+            
             message = "Het cho";
+            mon.setJcomboBoxToEnable(false);
         }
         JOptionPane.showMessageDialog(null, "Id" + ban_Model.get(STTBan - 1).getIdBan() + "\n" + "Trang thai: " + message);
 
