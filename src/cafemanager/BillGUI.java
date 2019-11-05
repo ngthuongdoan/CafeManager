@@ -8,15 +8,8 @@ package cafemanager;
 import control.ImagePanel;
 import control.IPAddress;
 import control.Connection;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -129,7 +122,7 @@ public class BillGUI extends javax.swing.JFrame {
                     Logger.getLogger(BillGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }, 0, 1000);
+        }, 0, 5000);
 
     }
 

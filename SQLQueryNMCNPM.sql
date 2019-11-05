@@ -179,6 +179,15 @@ create table TrangThai
 	constraint fk_tt_mhd foreign key (MaHoaDon) references HoaDon (MaHoaDon),
 )
 
+insert into HoaDon
+values
+	('HD_3', 'TABLE_#3', 'NV_3', 'KH_1', '20190618 10:34:10 AM', '35000')
+insert into ChiTietMon
+values
+	('HD_3', 'MA_23', 1)
+insert into TrangThai
+VALUES('HD_3',0)
+
 insert into TrangThai
 VALUES
 	('HD_1', 0),
@@ -189,8 +198,7 @@ from TrangThai as a
 where 
 	a.MaHoaDon='HD_1'
 
-update TrangThai set TrangThaiHD=0 where 
-	a.MaHoaDon='HD_1'
+update TrangThai set TrangThaiHD=0
 
 select a.MaHoaDon, a.MaBan
 from HoaDon as a, TrangThai as b
