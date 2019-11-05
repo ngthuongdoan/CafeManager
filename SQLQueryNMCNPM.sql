@@ -193,6 +193,8 @@ VALUES
 	('HD_1', 0),
 	('HD_2', 0)
 
+select MatKhau from NhanVien where TaiKhoan ='doanngocthuong'
+--xem trang thai hoa don
 select a.TrangThaiHD
 from TrangThai as a
 where 
@@ -200,18 +202,25 @@ where
 
 update TrangThai set TrangThaiHD=0
 
+--select hoa don chua xong bep
 select a.MaHoaDon, a.MaBan
 from HoaDon as a, TrangThai as b
 where 
 	b.TrangThaiHD=0 and
 	b.MaHoaDon=a.MaHoaDon
 
+-- select mon theo hoa don 
 select a.TenMon, b.SoLuongMon
 from Mon as a, ChiTietMon as b
 where
 	b.MaHoaDon='HD_2' AND
 	b.MaMon = a.MaMon
-
+select GiaMon from Mon where TenMon=N'Cơm tấm' 
+-- select mon theo danh muc
+select a.TenMon, a.GiaMon from Mon as a, DanhMuc as b 
+where 
+	b.TenDanhMuc=N'Ăn sáng' AND
+	b.MaDanhMuc=a.MaDanhMuc
 
 --Xóa tất cả dữ liệu trong 1 bảng
 delete from KhachHang

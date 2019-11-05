@@ -9,13 +9,14 @@ import control.Connection;
 import control.IPAddress;
 import control.ImagePanel;
 import java.awt.Color;
-import java.awt.Font;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -58,6 +59,8 @@ public class LoginGUI extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setForeground(java.awt.Color.white);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -124,28 +127,64 @@ public class LoginGUI extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        String queryString = "select MatKhau from NhanVien where TaiKhoan ='" + usernameText.getText().trim() + "'";
+        String queryPass = "select MatKhau from NhanVien where TaiKhoan ='" + usernameText.getText().trim() + "'";
+        String queryCV;
+        String maCV;
         try {
-            ResultSet rs = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", queryString);
+            ResultSet checkpass = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", queryPass);
+            
+            while (checkpass.getString("MatKhau")==null) {
+                JFrame frame = new JFrame();
+                JOptionPane.showMessageDialog(frame,
+                        "Invalid",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            }
             int check = 0;
-            while(rs.next()){
-                char[] passwordTXT = passwordText.getPassword();
-                char[] passwordDB = rs.getString("MatKhau").trim().toCharArray();
-                if(Arrays.equals(passwordTXT,passwordDB)){
-                    check = 1;
+            char[] passwordTXT = passwordText.getPassword();
+            char[] passwordDB = checkpass.getString("MatKhau").toCharArray();
+            if (Arrays.equals(passwordTXT, passwordDB)) {
+                check = 1;
+            }
+            if (check == 1) {
+                JFrame frame = new JFrame();
+                JOptionPane.showMessageDialog(frame,
+                        "Welcome",
+                        "SUCCESS",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                queryCV = "select MaChucVu from NhanVien where TaiKhoan ='" + usernameText.getText().trim() + "' AND"
+                        + "MatKhau='" + passwordText.getPassword().toString() + "'";
+                ResultSet getCV = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", queryCV);
+                maCV = new String(getCV.getString("MaChucVu"));
+                try {
+                    loadGUI(maCV);
+                } catch (Exception ex) {
+                    Logger.getLogger(LoginGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-//            if(check == 1){
-//                QuanLy quanLy = new QuanLy();
-//                quanLy.setVisible(true);
-//                this.dispose();
-//            }
         } catch (SQLException ex) {
-            Logger.getLogger(LoginGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginGUI.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(LoginGUI.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginGUI.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1MouseClicked
+
+    private void loadGUI(String maCV) throws Exception {
+        switch (maCV) {
+            case "CV_2":
+                new BillGUI();
+                this.dispose();
+            case "CV_3":
+                new BanGUI();
+                this.dispose();
+            case "CV_4":
+                new QuanLy();
+                this.dispose();
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -184,7 +223,8 @@ public class LoginGUI extends javax.swing.JFrame {
             try {
                 new LoginGUI().setVisible(true);
             } catch (Exception ex) {
-                Logger.getLogger(LoginGUI.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(LoginGUI.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
@@ -197,4 +237,5 @@ public class LoginGUI extends javax.swing.JFrame {
     private javax.swing.JPasswordField passwordText;
     private javax.swing.JTextField usernameText;
     // End of variables declaration//GEN-END:variables
+
 }
