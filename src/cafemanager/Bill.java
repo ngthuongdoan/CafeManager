@@ -7,10 +7,9 @@ public class Bill {
 
     private String idBill;
     private String idTable;
-    private Date date;
-    private Customer cus;
+    private String date;
     private ArrayList<Item> items = new ArrayList<Item>();
-    private float total;
+    private String total;
 
     public String getIdTable() {
         return idTable;
@@ -28,34 +27,21 @@ public class Bill {
         this.idBill = idBill;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-//    public Item getItems() {
-//        return items;
-//    }
-//    public void setItems(Item items) {
-//        this.items.
-//    }
-    public float getTotal() {
+
+    public String getTotal() {
         return total;
     }
 
-    public void setTotal(float total) {
+    public void setTotal(String total) {
         this.total = total;
-    }
-
-    public Customer getCus() {
-        return cus;
-    }
-
-    public void setCus(Customer cus) {
-        this.cus = cus;
     }
 
     public void setMon(String ten, int soluong) {

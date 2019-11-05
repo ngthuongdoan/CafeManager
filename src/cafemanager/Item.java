@@ -17,8 +17,7 @@ class Item {
         this.price = price;
     }
 
-    Item() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Item() {
     }
 
     

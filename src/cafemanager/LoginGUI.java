@@ -132,14 +132,16 @@ public class LoginGUI extends javax.swing.JFrame {
         String maCV;
         try {
             ResultSet checkpass = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", queryPass);
-            
-            while (checkpass.getString("MatKhau")==null) {
+            checkpass.next();
+            System.out.println(checkpass);
+            while (checkpass.getString("MatKhau").isEmpty()) {
                 JFrame frame = new JFrame();
                 JOptionPane.showMessageDialog(frame,
                         "Invalid",
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE);
             }
+            
             int check = 0;
             char[] passwordTXT = passwordText.getPassword();
             char[] passwordDB = checkpass.getString("MatKhau").toCharArray();

@@ -13,8 +13,10 @@ import java.util.logging.Logger;
 import control.Connection;
 import control.IPAddress;
 import control.ImagePanel;
+import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import java.util.Date;
 
 /**
  *
@@ -52,45 +54,42 @@ public class MonGUI extends javax.swing.JFrame {
     }
 
     public MonGUI() throws Exception {
-        this.ip  = ip;
+        this.ip = ip;
         initComponents();
         addmoreGUI();
         table = new DefaultTableModel();
         table.setColumnIdentifiers(header);
         jTable1.setModel(table);
-
     }
 
     public void setSTTBan(int STTBan) {
         txtSTTBan.setText("Table_#" + STTBan);
         this.STTBan_Mon = STTBan;
-        
+
 //        setMaHoaDon();
-       
     }
-    
+
 //    SAI
-    public void setMaHoaDon(){
+    public void setMaHoaDon() {
         String query = "SELECT MAX(MaHoaDon) as a from HoaDon";
         String MAX_MaHD = "";
         try {
             ResultSet rs = control.Connection.ConnectQuery(ip, port, dbName, userName, passWord, query);
-            while (rs.next()) {                
+            while (rs.next()) {
                 try {
-                     MAX_MaHD = rs.getString("a");
+                    MAX_MaHD = rs.getString("a");
                 } catch (NumberFormatException e) {
                     System.out.println("Loi");
                 }
                 System.out.println("Max_MHD: " + rs.getInt("a"));
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-       
+
     }
 
     public void setTRANGTHAI(BanGUI ban, int STTBan) {
@@ -269,7 +268,7 @@ public class MonGUI extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -465,14 +464,27 @@ public class MonGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDatMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDatMonActionPerformed
-        if (table.getRowCount()!= 0) {
+        if (table.getRowCount() != 0) {
             ban.ban_Model.get(STTBan_Mon - 1).setStatus(true);
             this.hide();
             ban.show();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+            Date d = new Date();
+//            System.out.println();
+            Bill b = new Bill();
+            b.setIdBill(this.txtMaHoaDon.getText());
+            b.setDate((String) formatter.format(d));
+            b.setIdTable(this.txtSTTBan.getText());
+            b.setTotal(this.jPanel2.toString());
+            for (int i = 0; i < this.table.getRowCount(); i++) {
+//                getmon
+            }
+            String queryInsertBill = "";
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Khong the tao hoa don trong");
         }
-        else JOptionPane.showMessageDialog(null, "Ko the tao hoa don trong");
-        
-        
+
 
     }//GEN-LAST:event_btnDatMonActionPerformed
 
@@ -571,20 +583,20 @@ public class MonGUI extends javax.swing.JFrame {
         String query = "select GiaMon from Mon WHERE TenMon =N'" + tenMon + "'";
         try {
             ResultSet rs = control.Connection.ConnectQuery(ip, port, dbName, userName, passWord, query);
-            
-            while (rs.next()) { 
+
+            while (rs.next()) {
                 txtTenMon.setText((jComboBox1.getSelectedItem().toString()));
                 txtGiaBan.setText(rs.getString("GiaMon"));
-                
+
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-       
+
+
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jComboBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jComboBox1MouseClicked
@@ -623,15 +635,15 @@ public class MonGUI extends javax.swing.JFrame {
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
 
-        int stt = Integer.valueOf(txtSTTXoaHang.getText());     
-       
-        tongTien -= Integer.parseInt((table.getValueAt(stt-1, 1).toString().trim()));
-      
-        if (table.getRowCount() > stt-1) {
-            table.removeRow(stt-1);
+        int stt = Integer.valueOf(txtSTTXoaHang.getText());
+
+        tongTien -= Integer.parseInt((table.getValueAt(stt - 1, 1).toString().trim()));
+
+        if (table.getRowCount() > stt - 1) {
+            table.removeRow(stt - 1);
             jTable1.setModel(table);
             txtSoLuong.setText(String.valueOf(table.getRowCount()));
-           
+
             txtTongTien.setText(String.valueOf(tongTien));
         }
     }//GEN-LAST:event_btnXoaActionPerformed
@@ -648,20 +660,19 @@ public class MonGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtDanhMuc4MouseClicked
 
-    
-    public void setJcomboBoxToEnable(boolean status){
-        
+    public void setJcomboBoxToEnable(boolean status) {
+
         jComboBox1.setEnabled(status);
-        
+
     }
-    
-    
+
+
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
-       
+
         ban.ban_Model.get(STTBan_Mon - 1).setStatus(false);
         this.hide();
         ban.show();
-        
+
     }//GEN-LAST:event_btnThanhToanActionPerformed
 
     /**

@@ -187,7 +187,7 @@ public class SuaNhanVien extends javax.swing.JFrame {
             txtDiaChiNV.getText(),txtSDTNV.getText(),txtTaiKhoanNV.getText(),txtMatKhauNV.getText());
         try{
             
-                java.sql.Connection con = NMCNPM.Connection.getKetNoi();
+                Connection con = Connection
                 String queryString = "update NhanVien set TenNhanVien =? ,TaiKhoan =?, MaChucVu =? ,MatKhau =? ,DiaChi =? ,SDT = ? where MaNhanVien ="+"'"+maNV+"'";
                 PreparedStatement statement = con.prepareStatement(queryString);
                 statement.setString(1,nhanVien.getHoTenNVString());

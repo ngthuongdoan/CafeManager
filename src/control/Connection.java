@@ -9,6 +9,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+//import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,15 +19,35 @@ import java.sql.Statement;
  */
 public class Connection {
 
+//    private String ipAddress;
+
     public static ResultSet ConnectQuery(String ipAddress, String port, String databasename, String username, String password, String query) throws SQLException, ClassNotFoundException {
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + port + ";instance=SQLSERVER;databaseName=" + databasename + ";user=" + username + ";password=" + password;
+        
         java.sql.Connection con = DriverManager.getConnection(dbUrl);
         Statement s = con.createStatement();
         ResultSet rs;
         rs = s.executeQuery(query);
         return rs;
     }
+
+    public static Connection getConnect(String ipAddress) {
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + "1433" + ";instance=SQLSERVER;databaseName=" + "CAFE" + ";user=" + "sa" + ";password=" + "sa2017";
+        Connection con = null;
+        try {
+            con = (Connection) DriverManager.getConnection(dbUrl);
+        } catch (SQLException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return con;
+    }
+
     public static void ConnectUpdate(String ipAddress, String port, String databasename, String username, String password, String query) throws SQLException, ClassNotFoundException {
         Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + port + ";instance=SQLSERVER;databaseName=" + databasename + ";user=" + username + ";password=" + password;
