@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
  */
 public class Login extends javax.swing.JFrame {
 
+    String ipAddress ="192.168.43.88";
     /**
      * Creates new form Login
      */
@@ -111,7 +112,7 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String dbUrl= "jdbc:sqlserver://ASUS-S510UQ\\SQLEXPRESS:1433;databaseName=CAFE;user=sa;password=sa2017";
+            String dbUrl= "jdbc:sqlserver://"+ipAddress+"\\SQLEXPRESS:1433;databaseName=CAFE;user=sa;password=sa2017";
             Connection con=DriverManager.getConnection(dbUrl);
             Statement stm = con.createStatement();
             ResultSet rs;

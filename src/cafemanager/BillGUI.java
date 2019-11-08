@@ -6,7 +6,6 @@
 package cafemanager;
 
 import control.ImagePanel;
-import control.IPAddress;
 import control.Connect;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,7 +27,7 @@ import javax.swing.text.Document;
 public class BillGUI extends javax.swing.JFrame {
 
     private ArrayList<Bill> billList;
-    private String ipAddress = "10.1.21.91";
+    private String ipAddress = "192.168.43.88";
 
     /**
      * Creates new form BillGUI

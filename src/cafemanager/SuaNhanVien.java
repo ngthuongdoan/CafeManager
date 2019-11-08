@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class SuaNhanVien extends javax.swing.JFrame {
     
     NhanVien nhanVien;
-    private final String ipAddress = "10.1.21.91";
+    private final String ipAddress = "192.168.43.88";
     private static int maNV;
     private static String hoTenNV;
     private static String taiKhoanNV;

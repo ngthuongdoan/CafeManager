@@ -27,7 +27,7 @@ public final class QuanLy extends javax.swing.JFrame {
     private NhanVien nhanVien;
     private Item mon;
     private int STT = 0;
-    private final String ipAddress = "10.1.21.91";
+    private final String ipAddress = "192.168.43.88";
     /**
      * Creates new form QuanLyU
      */

@@ -50,7 +50,7 @@ VALUES
 
 create table NhanVien
 (
-	MaNhanVien char(10) primary key,
+	MaNhanVien int primary key,
 	MaChucVu char(10) not null,
 	TaiKhoan char(20) not null,
 	MatKhau char(20) not null,
@@ -62,16 +62,16 @@ create table NhanVien
 
 INSERT INTO NhanVien
 VALUES
-	('NV_1', 'CV_1', 'haminhthuan', 'haminhthuanpass', N'Hà Minh Thuận', N'Sadek, Đồng Tháp', '0375829573'),
-	('NV_2', 'CV_2', 'doanngocthuong', 'doanngocthuongpass', N'Đoàn Ngọc Thưởng', N'Vị Thanh, Hậu Giang', '0945687215'),
-	('NV_3', 'CV_3', 'huynhtanky', 'huynhtankypass', N'Huỳnh Tấn Kỷ', N'Vị Thủy, Hậu Giang', '0874521687'),
-	('NV_4', 'CV_4', 'doanhoangtinh', 'doanhoangtinhpass', N'Đoàn Hoàng Tính', N'Tháp Mười, Đồng Tháp', '074589615')
+	('1', 'CV_1', 'haminhthuan', 'haminhthuanpass', N'Hà Minh Thuận', N'Sadek, Đồng Tháp', '0375829573'),
+	('2', 'CV_2', 'doanngocthuong', 'doanngocthuongpass', N'Đoàn Ngọc Thưởng', N'Vị Thanh, Hậu Giang', '0945687215'),
+	('3', 'CV_3', 'huynhtanky', 'huynhtankypass', N'Huỳnh Tấn Kỷ', N'Vị Thủy, Hậu Giang', '0874521687'),
+	('4', 'CV_4', 'doanhoangtinh', 'doanhoangtinhpass', N'Đoàn Hoàng Tính', N'Tháp Mười, Đồng Tháp', '074589615')
 
 create table HoaDon
 (
 	MaHoaDon char(10) primary key,
 	MaBan char(10) not null,
-	MaNhanVien char(10),
+	MaNhanVien int,
 	MaKH char(10),
 	NgayTaoHD datetime not null,
 	TongTien char(10) not null,
@@ -82,8 +82,8 @@ create table HoaDon
 
 INSERT INTO HoaDon
 VALUES
-	('HD_1', 'TABLE_#1', 'NV_3', 'KH_1', '20190618 10:34:09 AM', '305000'),
-	('HD_2', 'TABLE_#4', 'NV_3', 'KH_2', '20190618 10:34:09 PM', '5250000')
+	('HD_1', 'TABLE_#1', '3', 'KH_1', '20190618 10:34:09 AM', '305000'),
+	('HD_2', 'TABLE_#4', '3', 'KH_2', '20190618 10:34:09 PM', '5250000')
 
 create table DanhMuc
 (
@@ -181,7 +181,7 @@ create table TrangThai
 
 insert into HoaDon
 values
-	('HD_3', 'TABLE_#3', 'NV_3', 'KH_1', '20190618 10:34:10 AM', '35000')
+	('HD_3', 'TABLE_#3', '3', 'KH_1', '20190618 10:34:10 AM', '35000')
 insert into ChiTietMon
 values
 	('HD_3', 'MA_23', 1)

@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public final class SuaMon extends javax.swing.JFrame {
 
     Item mon;
-    private final String ipAddress = "10.1.21.91";
+    private final String ipAddress = "192.168.43.88";
     private static String maMon;
     private static String tenMon;
     private static String moTa;

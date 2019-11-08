@@ -23,23 +23,23 @@ import java.util.Date;
  * @author TanKy
  */
 public class MonGUI extends javax.swing.JFrame {
-
+    
     BanGUI ban;
     boolean status = false;
     int STTBan_Mon;
     int tongTien = 0;
-
+    
     String[] header = {"Tên Món", "Giá Bán"};
     Object[] data = new Object[3];
     DefaultTableModel table;
-
-    private String ip = "10.1.21.91";
+    
+    private String ip = "192.168.43.88";
     String port = "1433";
     String dbName = "CAFE";
     String userName = "sa";
     String passWord = "sa2017";
     String tenDanhMuc = "";
-
+    
     private void addmoreGUI() {
         ImagePanel panel;
         panel = new ImagePanel(
@@ -52,7 +52,7 @@ public class MonGUI extends javax.swing.JFrame {
         this.btnXoa.setContentAreaFilled(false);
         this.btnGetData.setContentAreaFilled(false);
     }
-
+    
     public MonGUI() throws Exception {
         this.ip = ip;
         initComponents();
@@ -61,27 +61,31 @@ public class MonGUI extends javax.swing.JFrame {
         table.setColumnIdentifiers(header);
         jTable1.setModel(table);
     }
-
+    
     public void setSTTBan(int STTBan) {
         txtSTTBan.setText("Table_#" + STTBan);
         this.STTBan_Mon = STTBan;
-
-//        setMaHoaDon();
+        
+        setMaHoaDon();
     }
 
 //    SAI
     public void setMaHoaDon() {
         String query = "SELECT MAX(MaHoaDon) as a from HoaDon";
         String MAX_MaHD = "";
+        int vitri;
         try {
             ResultSet rs = control.Connect.ConnectQuery(ip, port, dbName, userName, passWord, query);
             while (rs.next()) {
                 try {
                     MAX_MaHD = rs.getString("a");
+                    String temp = MAX_MaHD.trim();
+                    vitri = Integer.parseInt(temp.substring(temp.length() - 1));
+                    txtMaHoaDon.setText("HD_" + (vitri + 1));
                 } catch (NumberFormatException e) {
                     System.out.println("Loi");
                 }
-                System.out.println("Max_MHD: " + rs.getInt("a"));
+//                System.out.println("Max_MHD: " + rs.getInt("a"));
 
             }
         } catch (SQLException ex) {
@@ -89,9 +93,9 @@ public class MonGUI extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
     }
-
+    
     public void setTRANGTHAI(BanGUI ban, int STTBan) {
         status = ban.ban_Model.get(STTBan).isStatus();
         this.ban = ban;
@@ -480,16 +484,16 @@ public class MonGUI extends javax.swing.JFrame {
 //                getmon
             }
             String queryInsertBill = "";
-
+            
         } else {
             JOptionPane.showMessageDialog(null, "Khong the tao hoa don trong");
         }
-
+        
 
     }//GEN-LAST:event_btnDatMonActionPerformed
 
     private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
-
+        
         ban.ban_Model.get(STTBan_Mon - 1).setStatus(false);
         this.hide();
         ban.show();
@@ -543,24 +547,24 @@ public class MonGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         txtDanhMuc4.setForeground(Color.black);
     }//GEN-LAST:event_txtDanhMuc4MouseExited
-
+    
     public void addDanhMucMon(String tenDanhMuc) {
         jComboBox1.removeAllItems();
         String query = "select a.TenMon, a.GiaMon from Mon AS a, DanhMuc AS b WHERE b.TenDanhMuc = N'" + tenDanhMuc + "' AND b.MaDanhMuc = a.MaDanhMuc";
-
+        
         try {
             ResultSet rs = Connect.ConnectQuery(ip, port, dbName, userName, passWord, query);
             while (rs.next()) {
                 jComboBox1.addItem(rs.getString("TenMon"));
             }
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
 
     private void txtDanhMuc1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtDanhMuc1MouseClicked
         String danhMucMon = "Ăn sáng";
@@ -578,24 +582,24 @@ public class MonGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_txtDanhMuc5MouseClicked
 
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-
+        
         String tenMon = jComboBox1.getSelectedItem().toString();
         String query = "select GiaMon from Mon WHERE TenMon =N'" + tenMon + "'";
         try {
             ResultSet rs = control.Connect.ConnectQuery(ip, port, dbName, userName, passWord, query);
-
+            
             while (rs.next()) {
                 txtTenMon.setText((jComboBox1.getSelectedItem().toString()));
                 txtGiaBan.setText(rs.getString("GiaMon"));
-
+                
             }
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MonGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
 
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
@@ -608,22 +612,22 @@ public class MonGUI extends javax.swing.JFrame {
     private void btnGetDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetDataActionPerformed
         String tenMon = jComboBox1.getSelectedItem().toString();
         System.out.println(tenMon);
-
+        
         String query = "select GiaMon from Mon WHERE TenMon =N'" + tenMon + "'";
         try {
             ResultSet rs = Connect.ConnectQuery(ip, port, dbName, userName, passWord, query);
-
+            
             while (rs.next()) {
                 data[0] = jComboBox1.getSelectedItem().toString();
                 data[1] = rs.getString("GiaMon");
                 table.addRow(data);
                 jTable1.setModel(table);
                 txtSoLuong.setText(String.valueOf(table.getRowCount()));
-
+                
                 System.out.println("Gia Mon: " + rs.getString("GiaMon"));
-
+                
                 tongTien += rs.getInt("GiaMon");
-
+                
                 txtTongTien.setText(String.valueOf(tongTien));
             }
         } catch (SQLException ex) {
@@ -634,16 +638,16 @@ public class MonGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGetDataActionPerformed
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
-
+        
         int stt = Integer.valueOf(txtSTTXoaHang.getText());
-
+        
         tongTien -= Integer.parseInt((table.getValueAt(stt - 1, 1).toString().trim()));
-
+        
         if (table.getRowCount() > stt - 1) {
             table.removeRow(stt - 1);
             jTable1.setModel(table);
             txtSoLuong.setText(String.valueOf(table.getRowCount()));
-
+            
             txtTongTien.setText(String.valueOf(tongTien));
         }
     }//GEN-LAST:event_btnXoaActionPerformed
@@ -659,16 +663,16 @@ public class MonGUI extends javax.swing.JFrame {
         addDanhMucMon(danhMucMon);
 
     }//GEN-LAST:event_txtDanhMuc4MouseClicked
-
+    
     public void setJcomboBoxToEnable(boolean status) {
-
+        
         jComboBox1.setEnabled(status);
-
+        
     }
-
+    
 
     private void btnThanhToanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThanhToanActionPerformed
-
+        
         ban.ban_Model.get(STTBan_Mon - 1).setStatus(false);
         this.hide();
         ban.show();
