@@ -131,6 +131,7 @@ public class MonGUI extends javax.swing.JFrame {
         btnXoa = new javax.swing.JButton();
         txtSTTXoaHang = new javax.swing.JTextField();
         btnThanhToan = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         txtDanhMuc2 = new javax.swing.JLabel();
         txtDanhMuc3 = new javax.swing.JLabel();
@@ -241,6 +242,7 @@ public class MonGUI extends javax.swing.JFrame {
 
         txtSoLuong.setText("So Luong");
 
+        txtTongTien.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         txtTongTien.setText("Tong Tien");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -266,6 +268,8 @@ public class MonGUI extends javax.swing.JFrame {
                 btnThanhToanActionPerformed(evt);
             }
         });
+
+        jLabel4.setText("jLabel4");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -294,11 +298,13 @@ public class MonGUI extends javax.swing.JFrame {
                                 .addComponent(btnDatMon, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtSTTXoaHang, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel4)
+                                        .addComponent(txtSTTXoaHang, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnThanhToan)
@@ -324,7 +330,9 @@ public class MonGUI extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(txtSoLuong))
                 .addGap(26, 26, 26)
-                .addComponent(txtTongTien)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTongTien)
+                    .addComponent(jLabel4))
                 .addGap(44, 44, 44)
                 .addComponent(btnThanhToan)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -731,6 +739,7 @@ public class MonGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
