@@ -7,7 +7,7 @@ package cafemanager;
 
 import control.ImagePanel;
 import control.IPAddress;
-import control.Connection;
+import control.Connect;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import javax.swing.text.Document;
 public class BillGUI extends javax.swing.JFrame {
 
     private ArrayList<Bill> billList;
-    private String ipAddress = IPAddress.getIP();
+    private String ipAddress = "10.1.21.91";
 
     /**
      * Creates new form BillGUI
@@ -68,7 +68,7 @@ public class BillGUI extends javax.swing.JFrame {
                 + "where "
                 + "b.TrangThaiHD=0 and "
                 + "b.MaHoaDon=a.MaHoaDon";
-        ResultSet resultBill = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", billquery);
+        ResultSet resultBill = Connect.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", billquery);
         while (resultBill.next()) {
             Bill tempBill = new Bill();
             tempBill.setIdBill(resultBill.getString("MaHoaDon"));
@@ -79,7 +79,7 @@ public class BillGUI extends javax.swing.JFrame {
                     + resultBill.getString("MaHoaDon")
                     + "' AND"
                     + "	b.MaMon = a.MaMon";
-            ResultSet resultMon = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", monquery);
+            ResultSet resultMon = Connect.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", monquery);
             while (resultMon.next()) {
                 tempBill.setMon(resultMon.getString("TenMon"), Integer.valueOf(resultMon.getString("SoLuongMon")));
             }
@@ -235,7 +235,7 @@ public class BillGUI extends javax.swing.JFrame {
                     + " where MaHoaDon='"
                     + mahoadon + "'";
 
-            Connection.ConnectUpdate(ipAddress, "1433", "CAFE", "sa", "sa2017", updateStateQuery);
+            Connect.ConnectUpdate(ipAddress, "1433", "CAFE", "sa", "sa2017", updateStateQuery);
             showBill();
         } catch (Exception ex) {
             //Do Nothing
@@ -254,7 +254,7 @@ public class BillGUI extends javax.swing.JFrame {
                     + " where MaHoaDon='"
                     + mahoadon + "'";
 
-            Connection.ConnectUpdate(ipAddress, "1433", "CAFE", "sa", "sa2017", updateStateQuery);
+            Connect.ConnectUpdate(ipAddress, "1433", "CAFE", "sa", "sa2017", updateStateQuery);
             showBill();
         } catch (Exception ex) {
             //Do Nothing
@@ -273,7 +273,7 @@ public class BillGUI extends javax.swing.JFrame {
                     + " where MaHoaDon='"
                     + mahoadon + "'";
 
-            Connection.ConnectUpdate(ipAddress, "1433", "CAFE", "sa", "sa2017", updateStateQuery);
+            Connect.ConnectUpdate(ipAddress, "1433", "CAFE", "sa", "sa2017", updateStateQuery);
             showBill();
         } catch (Exception ex) {
             //Do Nothing

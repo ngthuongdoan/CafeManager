@@ -5,11 +5,11 @@
  */
 package control;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-//import java.sql.Connection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author BlackVernon
  */
-public class Connection {
+public class Connect {
 
 //    private String ipAddress;
 
@@ -36,14 +36,14 @@ public class Connection {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);
         }
         String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + "1433" + ";instance=SQLSERVER;databaseName=" + "CAFE" + ";user=" + "sa" + ";password=" + "sa2017";
         Connection con = null;
         try {
-            con = (Connection) DriverManager.getConnection(dbUrl);
+            con = DriverManager.getConnection(dbUrl);
         } catch (SQLException ex) {
-            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Connect.class.getName()).log(Level.SEVERE, null, ex);
         }
         return con;
     }
@@ -55,4 +55,6 @@ public class Connection {
         Statement s = con.createStatement();
         s.executeUpdate(query);
     }
+
+   
 }

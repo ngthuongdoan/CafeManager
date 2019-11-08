@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import control.Connection;
+import control.Connect;
 import control.IPAddress;
 import control.ImagePanel;
 import java.text.SimpleDateFormat;
@@ -74,7 +74,7 @@ public class MonGUI extends javax.swing.JFrame {
         String query = "SELECT MAX(MaHoaDon) as a from HoaDon";
         String MAX_MaHD = "";
         try {
-            ResultSet rs = control.Connection.ConnectQuery(ip, port, dbName, userName, passWord, query);
+            ResultSet rs = control.Connect.ConnectQuery(ip, port, dbName, userName, passWord, query);
             while (rs.next()) {
                 try {
                     MAX_MaHD = rs.getString("a");
@@ -549,7 +549,7 @@ public class MonGUI extends javax.swing.JFrame {
         String query = "select a.TenMon, a.GiaMon from Mon AS a, DanhMuc AS b WHERE b.TenDanhMuc = N'" + tenDanhMuc + "' AND b.MaDanhMuc = a.MaDanhMuc";
 
         try {
-            ResultSet rs = Connection.ConnectQuery(ip, port, dbName, userName, passWord, query);
+            ResultSet rs = Connect.ConnectQuery(ip, port, dbName, userName, passWord, query);
             while (rs.next()) {
                 jComboBox1.addItem(rs.getString("TenMon"));
             }
@@ -582,7 +582,7 @@ public class MonGUI extends javax.swing.JFrame {
         String tenMon = jComboBox1.getSelectedItem().toString();
         String query = "select GiaMon from Mon WHERE TenMon =N'" + tenMon + "'";
         try {
-            ResultSet rs = control.Connection.ConnectQuery(ip, port, dbName, userName, passWord, query);
+            ResultSet rs = control.Connect.ConnectQuery(ip, port, dbName, userName, passWord, query);
 
             while (rs.next()) {
                 txtTenMon.setText((jComboBox1.getSelectedItem().toString()));
@@ -611,7 +611,7 @@ public class MonGUI extends javax.swing.JFrame {
 
         String query = "select GiaMon from Mon WHERE TenMon =N'" + tenMon + "'";
         try {
-            ResultSet rs = Connection.ConnectQuery(ip, port, dbName, userName, passWord, query);
+            ResultSet rs = Connect.ConnectQuery(ip, port, dbName, userName, passWord, query);
 
             while (rs.next()) {
                 data[0] = jComboBox1.getSelectedItem().toString();

@@ -5,15 +5,17 @@
  */
 package cafemanager;
 
-import control.Connection;
-import control.IPAddress;
-import java.sql.DriverManager;
+import control.Connect;
+import control.ImagePanel;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -21,106 +23,117 @@ import javax.swing.table.TableModel;
  *
  * @author ASUS
  */
-public class QuanLy extends javax.swing.JFrame {
-
+public final class QuanLy extends javax.swing.JFrame {
     private NhanVien nhanVien;
     private Item mon;
-    private char STT = 0;
-    private String ipAddress;
-
+    private int STT = 0;
+    private final String ipAddress = "10.1.21.91";
     /**
      * Creates new form QuanLyU
      */
+    
+    private void addMoreGUI() {
+        ImagePanel panel;
+        panel = new ImagePanel(
+                new ImageIcon("src\\image\\loginBackgroundRaw.jpg").getImage());
+        setBounds(0, 0, 1366, 720);
+        getContentPane().add(panel);
+        setVisible(true);
+    }
+    
     public QuanLy() throws Exception {
         initComponents();
-        this.ipAddress = IPAddress.getIP();
+        addMoreGUI();
         txtMaNV.setEditable(false);
         btnSuaTTNV.setEnabled(false);
         btnXoaTTNV.setEnabled(false);
+        btnSuaMon.setEnabled(false);
+        btnXoaMon.setEnabled(false);
         nhanVien = new NhanVien();
+        mon = new Item();
         STT = getSTT();
-        System.out.println(STT);
-        if (STT == 0) {
+        if(STT==0){
             STT++;
-            txtMaNV.setText("NV_" + 1);
-        } else {
+           txtMaNV.setText(""+1);
+        }else{
             STT++;
-            txtMaNV.setText("NV_" + STT);
+            txtMaNV.setText(""+STT);
         }
         loadDataNhanVien();
         loadDataMon();
     }
-
-    public char getSTT() {
-        String kq = new String();
-        char i=0;
-        try {
-            String query = "select MaNhanVien from NhanVien";
-            ResultSet rs = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", query);
-            while (rs.next()) {
-                kq = rs.getString("MaNhanVien");
+    
+    public int getSTT(){
+        int kq = 0;
+        try{
+            Connection con = (Connection) Connect.getConnect(ipAddress);
+            String str = "select Max(MaNhanVien) from NhanVien";
+            Statement stm = con.createStatement();
+            ResultSet rs = stm.executeQuery(str);            
+            while(rs.next()){                
+               kq = rs.getInt(1);
             }
-            System.out.println(kq);
-            i = kq.charAt(3);
-            
-        } catch (Exception ex) {
+        }catch(SQLException ex){  
         }
-        return i;
+        return kq;
     }
-
-    public void loadDataNhanVien() {
-        try {
-            String[] array = {"Mã nhân viên", "Họ tên", "Chức Vụ", "Tài khoản", "Mật khẩu", "Địa chỉ", "SĐT"};
-            DefaultTableModel defaultTableModel = new DefaultTableModel(array, 0);
-            String queryString = "select a.MaNhanVien,a.TenNhanVien,b.TenChucVu,a.TaiKhoan,a.MatKhau,"
-                    + "a.DiaChi,a.SDT from NhanVien as a, ChucVu as b where a.MaChucVu = b.MaChucVu";
-            ResultSet rs = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", queryString);
-            while (rs.next()) {
-                Vector vector = new Vector();
-                vector.add(rs.getString("MaNhanVien"));
-                vector.add(rs.getString("TenNhanVien"));
-                vector.add(rs.getString("TenChucVu"));
-                vector.add(rs.getString("TaiKhoan"));
-                vector.add(rs.getString("MatKhau"));
-                vector.add(rs.getString("DiaChi"));
-                vector.add(rs.getString("SDT"));
-                defaultTableModel.addRow(vector);
+      
+    public void loadDataNhanVien(){
+        try{
+            try (Connection con = (Connection) control.Connect.getConnect(ipAddress)) {
+                Statement stm = con.createStatement();
+                String [] array = {"Mã nhân viên","Họ tên","Chức Vụ","Tài khoản","Mật khẩu","Địa chỉ","SĐT"};
+                DefaultTableModel defaultTableModel =  new DefaultTableModel(array,0);
+                String queryString = "select a.MaNhanVien,a.TenNhanVien,b.TenChucVu,a.TaiKhoan,a.MatKhau,"
+                        + "a.DiaChi,a.SDT from NhanVien as a, ChucVu as b where a.MaChucVu = b.MaChucVu";
+                ResultSet rs = stm.executeQuery(queryString);
+                while(rs.next()){
+                    Vector vector = new Vector();
+                    vector.add(rs.getString("MaNhanVien"));
+                    vector.add(rs.getString("TenNhanVien"));
+                    vector.add(rs.getString("TenChucVu"));
+                    vector.add(rs.getString("TaiKhoan"));
+                    vector.add(rs.getString("MatKhau"));
+                    vector.add(rs.getString("DiaChi"));
+                    vector.add(rs.getString("SDT"));
+                    defaultTableModel.addRow(vector);
+                }
+                tableQLNV.setModel(defaultTableModel);
             }
-            tableQLNV.setModel(defaultTableModel);
-        } catch (Exception ex) {
-        }
+        }catch(SQLException ex){  
+        }      
     }
-
-    public void loadDataMon() {
-        try {
-            String[] array = {"Mã món", "Tên món", "Mô tả", "Danh mục", "Giá món"};
-            DefaultTableModel defaultTableModel = new DefaultTableModel(array, 0);
-            String queryString = "select a.MaMon, a.TenMon, a.MoTaMon, b.TenDanhMuc, a.GiaMon from Mon as a, DanhMuc as b where a.MaDanhMuc = b.MaDanhMuc";
-            ResultSet rs = Connection.ConnectQuery(ipAddress, "1433", "CAFE", "sa", "sa2017", queryString);
-            while (rs.next()) {
-                Vector vector = new Vector();
-                vector.add(rs.getString("MaMon"));
-                vector.add(rs.getString("TenMon"));
-                vector.add(rs.getString("MoTaMon"));
-                vector.add(rs.getString("TenDanhMuc"));
-                vector.add(rs.getString("GiaMon"));
-                defaultTableModel.addRow(vector);
+    public void loadDataMon(){
+        try{
+            try (Connection con = (Connection) control.Connect.getConnect(ipAddress)) {
+                Statement stm = con.createStatement();
+                String [] array = {"Mã món","Tên món","Mô tả","Danh mục","Giá món"};
+                DefaultTableModel defaultTableModel =  new DefaultTableModel(array,0);
+                String queryString = "select a.MaMon, a.TenMon, a.MoTaMon, b.TenDanhMuc, a.GiaMon from Mon as a, DanhMuc as b where a.MaDanhMuc = b.MaDanhMuc";
+                ResultSet rs = stm.executeQuery(queryString);
+                while(rs.next()){
+                    Vector vector = new Vector();
+                    vector.add(rs.getString("MaMon"));
+                    vector.add(rs.getString("TenMon"));
+                    vector.add(rs.getString("MoTaMon"));
+                    vector.add(rs.getString("TenDanhMuc"));
+                    vector.add(rs.getString("GiaMon"));
+                    defaultTableModel.addRow(vector);
+                }
+                tableQLM.setModel(defaultTableModel);
             }
-            tableQLM.setModel(defaultTableModel);
-        } catch (Exception ex) {
-        }
+        }catch(SQLException ex){  
+        }      
+        
     }
-
-    public boolean IsEmpty() {
-        if (!txtHoTenNV.getText().equals("")
-                || !txtDiaChiNV.getText().equals("") || !txtSDTNV.getText().equals("")
-                || !txtTaiKhoanNV.getText().equals("") || !txtMatKhauNV.getText().equals("")) {
-            return true;
-        }
-        return false;
-
+    
+    public boolean IsEmpty(){
+        
+            return !txtHoTenNV.getText().equals("")
+                    || !txtDiaChiNV.getText().equals("") || !txtSDTNV.getText().equals("") ||
+                    !txtTaiKhoanNV.getText().equals("") || !txtMatKhauNV.getText().equals("");
+        
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -178,43 +191,43 @@ public class QuanLy extends javax.swing.JFrame {
         jPanel1.setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 22)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Mã nhân viên");
         jPanel1.add(jLabel1);
         jLabel1.setBounds(40, 80, 187, 40);
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 22)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Họ tên nhân viên");
         jPanel1.add(jLabel2);
         jLabel2.setBounds(40, 140, 190, 40);
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 22)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Tài khoản");
         jPanel1.add(jLabel3);
         jLabel3.setBounds(40, 200, 187, 40);
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 22)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Mật khẩu");
         jPanel1.add(jLabel4);
         jLabel4.setBounds(40, 260, 187, 40);
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 22)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Chức vụ");
         jPanel1.add(jLabel5);
         jLabel5.setBounds(40, 320, 187, 40);
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 22)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Địa chỉ");
         jPanel1.add(jLabel6);
         jLabel6.setBounds(40, 380, 187, 40);
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 22)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setText("Số điện thoại");
         jPanel1.add(jLabel7);
         jLabel7.setBounds(40, 440, 187, 40);
@@ -236,12 +249,7 @@ public class QuanLy extends javax.swing.JFrame {
         txtMatKhauNV.setBounds(250, 260, 201, 40);
 
         cboChucVuNV.setFont(new java.awt.Font("Arial", 0, 22)); // NOI18N
-        cboChucVuNV.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quản lý", "Thu ngân", "Bếp", "Bồi bàn", "Chủ" }));
-        cboChucVuNV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cboChucVuNVActionPerformed(evt);
-            }
-        });
+        cboChucVuNV.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quản lý", "Thu ngân", "Nhân viên bếp", "Phục vụ ", "Dọn dẹp", " " }));
         jPanel1.add(cboChucVuNV);
         cboChucVuNV.setBounds(250, 320, 201, 40);
 
@@ -304,6 +312,8 @@ public class QuanLy extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(500, 80, 830, 490);
+
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(jLabel8);
         jLabel8.setBounds(0, 0, 1400, 730);
 
@@ -312,31 +322,31 @@ public class QuanLy extends javax.swing.JFrame {
         jPanel4.setLayout(null);
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Mã món ");
         jPanel4.add(jLabel9);
         jLabel9.setBounds(77, 114, 169, 40);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("Mô tả món");
         jPanel4.add(jLabel10);
         jLabel10.setBounds(77, 279, 169, 40);
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Tên món ");
         jPanel4.add(jLabel11);
         jLabel11.setBounds(77, 196, 169, 40);
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
         jLabel12.setText("Danh mục món ");
         jPanel4.add(jLabel12);
         jLabel12.setBounds(77, 413, 169, 40);
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
         jLabel13.setText("Giá món");
         jPanel4.add(jLabel13);
         jLabel13.setBounds(77, 502, 169, 40);
@@ -356,7 +366,7 @@ public class QuanLy extends javax.swing.JFrame {
         jScrollPane3.setBounds(264, 279, 260, 90);
 
         cboDanhMuc.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
-        cboDanhMuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ăn sáng", "Ăn trưa", "Ăn tối", "Đồ ngọt", "Nước" }));
+        cboDanhMuc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Đồ uống", "Đồ ăn" }));
         jPanel4.add(cboDanhMuc);
         cboDanhMuc.setBounds(264, 413, 260, 40);
 
@@ -375,6 +385,11 @@ public class QuanLy extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableQLM.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableQLMMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tableQLM);
 
         jPanel4.add(jScrollPane2);
@@ -409,6 +424,9 @@ public class QuanLy extends javax.swing.JFrame {
         });
         jPanel4.add(btnXoaMon);
         btnXoaMon.setBounds(440, 590, 80, 35);
+
+        jLabel15.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jPanel4.add(jLabel15);
         jLabel15.setBounds(0, 0, 1360, 730);
 
@@ -451,76 +469,72 @@ public class QuanLy extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void btnThemTTNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemTTNVActionPerformed
         // TODO add your handling code here:
-
-        nhanVien = new NhanVien(Integer.parseInt(txtMaNV.getText()), txtHoTenNV.getText(), cboChucVuNV.getItemAt(cboChucVuNV.getSelectedIndex()),
-                txtDiaChiNV.getText(), txtSDTNV.getText(), txtTaiKhoanNV.getText(), txtMatKhauNV.getText());
-        try {
-            if (IsEmpty()) {
-                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + "1433" + ";instance=SQLSERVER;databaseName=" + "CAFE" + ";user=" + "sa" + ";password=" + "sa2017";
-                java.sql.Connection con = DriverManager.getConnection(dbUrl);
-                String queryString = "insert into NhanVien values (?,?,?,?,?,?,?)";
-                PreparedStatement statement = con.prepareStatement(queryString);
-                statement.setInt(1, nhanVien.getMaNVInt());
-                String maChucVu = cboChucVuNV.getItemAt(cboChucVuNV.getSelectedIndex());
-                switch (maChucVu) {
-                    case "Quản lý":
-                        statement.setString(2, "CV_4");
-                        break;
-                    case "Thu ngân":
-                        statement.setString(2, "CV_3");
-                        break;
-                    case "Bếp":
-                        statement.setString(2, "CV_2");
-                        break;
-                    case "Bồi bàn":
-                        statement.setString(2, "CV_1");
-                        break;
-                    case "Chủ":
-                        statement.setString(2, "CV_5");
-                        break;
+        
+        nhanVien = new NhanVien(Integer.parseInt(txtMaNV.getText()),txtHoTenNV.getText(),cboChucVuNV.getItemAt(cboChucVuNV.getSelectedIndex()),
+            txtDiaChiNV.getText(),txtSDTNV.getText(),txtTaiKhoanNV.getText(),txtMatKhauNV.getText());
+        try{
+            if(IsEmpty()){
+                try (Connection con = (Connection) control.Connect.getConnect(ipAddress)) {
+                    String queryString = "insert into NhanVien values (?,?,?,?,?,?,?)";
+                    PreparedStatement statement = con.prepareStatement(queryString);
+                    statement.setInt(1,nhanVien.getMaNVInt());
+                    String maChucVu = cboChucVuNV.getItemAt(cboChucVuNV.getSelectedIndex());
+                    switch (maChucVu) {
+                        case "Bồi bàn":
+                            statement.setString(2,"CV_1");
+                            break;
+                        case "Bếp":
+                            statement.setString(2,"CV_2");
+                            break;
+                        case "Thu ngân":
+                            statement.setString(2,"CV_3");
+                            break;
+                        case "Quản lý":
+                            statement.setString(2,"CV_4");
+                            break;
+                        case "Chủ":
+                            statement.setString(2,"CV_5");
+                            break;
+                    }
+                    statement.setString(3,nhanVien.getTaiKhoanNVString());
+                    statement.setString(4,nhanVien.getMatKhauNVString());
+                    statement.setString(5,nhanVien.getHoTenNVString());
+                    statement.setString(6,nhanVien.getDiaChiNVString());
+                    statement.setString(7,nhanVien.getSdtNVString());
+                    statement.executeUpdate();
+                    loadDataNhanVien();
                 }
-                statement.setString(3, nhanVien.getTaiKhoanNVString());
-                statement.setString(4, nhanVien.getMatKhauNVString());
-                statement.setString(5, nhanVien.getHoTenNVString());
-                statement.setString(6, nhanVien.getDiaChiNVString());
-                statement.setString(7, nhanVien.getSdtNVString());
-                statement.executeUpdate();
-                loadDataNhanVien();
                 STT++;
-                txtMaNV.setText("NV_" + STT);
+                txtMaNV.setText(""+STT);
             }
-
-        } catch (Exception ex) {
+                   
+        }catch(SQLException ex){
             System.out.println(ex);
-        }
+        }   
     }//GEN-LAST:event_btnThemTTNVActionPerformed
 
     private void btnSuaTTNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaTTNVActionPerformed
         // TODO add your handling code here:    
-        SuaNhanVien snv = new SuaNhanVien(Integer.parseInt(tableQLNV.getValueAt(tableQLNV.getSelectedRow(), 0).toString()), tableQLNV.getValueAt(tableQLNV.getSelectedRow(), 1).toString(),
-                tableQLNV.getValueAt(tableQLNV.getSelectedRow(), 3).toString(), tableQLNV.getValueAt(tableQLNV.getSelectedRow(), 4).toString(), tableQLNV.getValueAt(tableQLNV.getSelectedRow(), 6).toString(),
-                tableQLNV.getValueAt(tableQLNV.getSelectedRow(), 5).toString());
+        SuaNhanVien snv = new SuaNhanVien(Integer.parseInt(tableQLNV.getValueAt(tableQLNV.getSelectedRow(),0).toString()),tableQLNV.getValueAt(tableQLNV.getSelectedRow(),1).toString(),
+        tableQLNV.getValueAt(tableQLNV.getSelectedRow(),3).toString(),tableQLNV.getValueAt(tableQLNV.getSelectedRow(),4).toString(),tableQLNV.getValueAt(tableQLNV.getSelectedRow(),6).toString(),
+        tableQLNV.getValueAt(tableQLNV.getSelectedRow(),5).toString());
         snv.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btnSuaTTNVActionPerformed
 
     private void btnXoaTTNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaTTNVActionPerformed
         // TODO add your handling code here:
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + "1433" + ";instance=SQLSERVER;databaseName=" + "CAFE" + ";user=" + "sa" + ";password=" + "sa2017";
-            java.sql.Connection con = DriverManager.getConnection(dbUrl);
-            String[] array = {"Mã nhân viên", "Họ tên", "Chức Vụ", "Tài khoản", "Mật khẩu", "Địa chỉ", "SĐT"};
-//            DefaultTableModel defaultTableModel = new DefaultTableModel(array, 0);
-            String queryString = "delete from NhanVien where MaNhanVien = '" + nhanVien.getMaNVInt() + "" + "'";
-            PreparedStatement statement = con.prepareStatement(queryString);
-            statement.executeUpdate();
-            loadDataNhanVien();
-            con.close();
-        } catch (Exception ex) {
+        try{
+            try (Connection con = (Connection) control.Connect.getConnect(ipAddress)) {
+                String queryString = "delete from NhanVien where MaNhanVien = '"+nhanVien.getMaNVInt()+""+"'";
+                PreparedStatement statement = con.prepareStatement(queryString);
+                statement.executeUpdate();
+                loadDataNhanVien();
+            }
+        }catch(SQLException ex){
             System.out.println(ex);
         }
 
@@ -530,65 +544,82 @@ public class QuanLy extends javax.swing.JFrame {
         // TODO add your handling code here:
         int i = tableQLNV.getSelectedRow();
         TableModel tableModel = tableQLNV.getModel();
-        nhanVien.setMaNVInt(Integer.parseInt(tableModel.getValueAt(i, 0).toString()));
+        nhanVien.setMaNVInt(Integer.parseInt(tableModel.getValueAt(i,0).toString()));
         btnSuaTTNV.setEnabled(true);
-        btnXoaTTNV.setEnabled(true);
+        btnXoaTTNV.setEnabled(true);   
     }//GEN-LAST:event_tableQLNVMouseClicked
 
     private void btnThemMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemMonActionPerformed
         // TODO add your handling code here:
-        mon = new Item(txtMaMon.getText(), txtTenMon.getText(), txtMoTa.getText(), cboDanhMuc.getItemAt(cboDanhMuc.getSelectedIndex()),
-                txtGiaMon.getText());
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String dbUrl = "jdbc:sqlserver://" + ipAddress + ":" + "1433" + ";instance=SQLSERVER;databaseName=" + "CAFE" + ";user=" + "sa" + ";password=" + "sa2017";
-            try (java.sql.Connection con = DriverManager.getConnection(dbUrl)) {
+        mon = new Item(txtMaMon.getText(),txtTenMon.getText(),txtMoTa.getText(),cboDanhMuc.getItemAt(cboDanhMuc.getSelectedIndex()),
+            txtGiaMon.getText());
+        try{
+            try (Connection con = (Connection) control.Connect.getConnect(ipAddress)) {
                 String queryString = "insert into Mon values (?,?,?,?,'',?)";
                 PreparedStatement statement = con.prepareStatement(queryString);
-                statement.setString(1, mon.getIdItem());
-                String maDanhMuc = cboDanhMuc.getItemAt(cboDanhMuc.getSelectedIndex());
+                statement.setString(1,mon.getIdItem());
+                String maDanhMuc = cboDanhMuc.getItemAt(cboDanhMuc.getSelectedIndex());       
                 switch (maDanhMuc) {
                     case "Ăn sáng":
-                        statement.setString(2, "DM_1");
+                        statement.setString(2,"DM_1");
                         break;
                     case "Ăn trưa":
-                        statement.setString(2, "DM_2");
+                        statement.setString(2,"DM_2");
                         break;
                     case "Ăn tối":
-                        statement.setString(2, "DM_3");
+                        statement.setString(2,"DM_3");
                         break;
                     case "Đồ ngọt":
-                        statement.setString(2, "DM_4");
+                        statement.setString(2,"DM_4");
                         break;
                     case "Nước":
-                        statement.setString(2, "DM_5");
+                        statement.setString(2,"DM_5");
                         break;
-                }
-                statement.setString(3, mon.getItemName());
-                statement.setString(4, mon.getExpressItem());
-                statement.setString(5, mon.getPrice());
-
+                } 
+                statement.setString(3,mon.getItemName());
+                statement.setString(4,mon.getExpressItem());
+                statement.setString(5,mon.getPrice());
                 statement.executeUpdate();
                 loadDataMon();
             }
-
-        } catch (Exception ex) {
+                     
+        }catch(SQLException ex){
             System.out.println(ex);
         }
     }//GEN-LAST:event_btnThemMonActionPerformed
 
     private void btnSuaMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaMonActionPerformed
         // TODO add your handling code here:
-
+        SuaMon sm;
+        sm = new SuaMon(tableQLM.getValueAt(tableQLM.getSelectedRow(),0).toString(),tableQLM.getValueAt(tableQLM.getSelectedRow(),1).toString(),tableQLM.getValueAt(tableQLM.getSelectedRow(),2).toString(),
+                Float.parseFloat(tableQLM.getValueAt(tableQLM.getSelectedRow(),4).toString()));
+        sm.setVisible(true);
+        this.setVisible(false);
+        
     }//GEN-LAST:event_btnSuaMonActionPerformed
 
     private void btnXoaMonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaMonActionPerformed
         // TODO add your handling code here:
+        try{
+            try (Connection con = (Connection)control.Connect.getConnect(ipAddress)) {
+                String queryString = "delete from Mon where MaMon = '"+mon.getIdItem()+""+"'";
+                PreparedStatement statement = con.prepareStatement(queryString);
+                statement.executeUpdate();
+                loadDataMon();
+            }
+        }catch(SQLException ex){
+            System.out.println(ex);
+        }
     }//GEN-LAST:event_btnXoaMonActionPerformed
 
-    private void cboChucVuNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboChucVuNVActionPerformed
+    private void tableQLMMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableQLMMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_cboChucVuNVActionPerformed
+         int i = tableQLM.getSelectedRow();
+        TableModel tableModel = tableQLM.getModel();
+        mon.setIdItem(tableModel.getValueAt(i,0).toString());
+        btnSuaMon.setEnabled(true); 
+        btnXoaMon.setEnabled(true);
+    }//GEN-LAST:event_tableQLMMouseClicked
 
     /**
      * @param args the command line arguments
@@ -617,15 +648,19 @@ public class QuanLy extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new QuanLy().setVisible(true);
-                } catch (Exception ex) {
-                    Logger.getLogger(QuanLy.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new QuanLy().setVisible(true);
+            } catch (Exception ex) {
+                Logger.getLogger(QuanLy.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
