@@ -193,6 +193,7 @@ VALUES
 	('HD_1', 0),
 	('HD_2', 0)
 
+select * from NhanVien
 select MatKhau from NhanVien where TaiKhoan ='doanngocthuong'
 --xem trang thai hoa don
 select a.TrangThaiHD
